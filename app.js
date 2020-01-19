@@ -13,6 +13,7 @@ var UIcontroller = (function(){
         inputBtn: '.add__btn'
     }
     return {
+        //Sometimes, no comment is the best comment. 
         getInput: function(){
         return {
             type: document.querySelector(StringLibrary.inputType).value, // Income or Expense 
@@ -20,6 +21,7 @@ var UIcontroller = (function(){
             value: document.querySelector(StringLibrary.inputValue).value //Amount
                 };
         },
+        //Using this method, StringLibrary can now be used outside of the function 
         getStringLibrary: function(){
         return StringLibrary;
     },
@@ -60,12 +62,6 @@ var controller = (function(budgetCtrl, UIctrl){
             itemAdder();    
        }
    });
-
-
-
-
-
-
 })(budgetController,UIcontroller);
 
 
