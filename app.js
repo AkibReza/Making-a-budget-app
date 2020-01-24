@@ -35,7 +35,7 @@ var budgetController = (function () {
     };
 
     return {
-        addItem: function (tip, des, val) {
+        addItem: function (type, des, val) {
             var newItem, ID;
 
             //Create new ID
@@ -70,7 +70,9 @@ var UIcontroller = (function () {
         inputType: '.add__type',
         inputDescription: '.add__description',
         inputValue: '.add__value',
-        inputBtn: '.add__btn'
+        inputBtn: '.add__btn',
+        expenseItem:'.expenses__list',
+        incomeItem: '.income__list'
     }
     return {
         //Sometimes, no comment is the best comment. 
@@ -82,9 +84,29 @@ var UIcontroller = (function () {
             };
         },
 
-        
+        // Here a new item and it's type(expense or income) goes. 
+        addListItem: function (obj, type) {
+            var html, newHtml, element;
+            //Create an HTML string with placeholder texts
+            if (type === 'inc') {
+                element = StringLibrary.incomeItem;
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            } else if(type === 'exp') {
+                element = StringLibrary.expenseItem;
+                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div> <div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            }
 
-        //Using this method, StringLibrary can now be used outside of the function 
+            // Replace the placeholder texts with actual code 
+            newHtml = html.replace('%id%', obj.id);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+
+            //Insert the HTML into the DOM.
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+
+        },
+    
+        //StringLibrary can be used outside of the function with this
         getStringLibrary: function () {
             return StringLibrary;
         },
@@ -122,10 +144,10 @@ var controller = (function (budgetCtrl, UIctrl) {
         input = UIctrl.getInput();
 
         // 2. Add the item to the inner work controller.
-
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
         // 3. Add the item to the Display controller.
+        UIctrl.addListItem(newItem, input.type)
 
         // 4. Calculate the budget.
 
