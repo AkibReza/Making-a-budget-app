@@ -80,7 +80,7 @@ var UIcontroller = (function () {
             return {
                 type: document.querySelector(StringLibrary.inputType).value, // Income or Expense 
                 description: document.querySelector(StringLibrary.inputDescription).value, //The name of the entry
-                value: document.querySelector(StringLibrary.inputValue).value //Amount
+                value: parseFloat(document.querySelector(StringLibrary.inputValue).value) //Amount
             };
         },
 
@@ -105,7 +105,21 @@ var UIcontroller = (function () {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
         },
-    
+        clearInput: function(){
+            var field, newField;
+
+            field = document.querySelectorAll(StringLibrary.inputDescription + ', ' + StringLibrary.inputValue);
+            newField = Array.prototype.slice.call(field);
+
+            newField.forEach(function(curr, i, arr){
+                curr.value = ""
+            });
+
+            newField[0].focus();
+
+        },
+
+
         //StringLibrary can be used outside of the function with this
         getStringLibrary: function () {
             return StringLibrary;
@@ -137,11 +151,24 @@ var controller = (function (budgetCtrl, UIctrl) {
         });
     };
 
+    var updateBudget = function(){
+        //1. Calculate the budget
+
+        //2. Return the budget
+
+        //3. Display the budget in display(UI)
+
+
+    }
+
+
+
     var itemAdder = function () {
         var input, newItem;
-        // 1. Get the filed input data.
-
+        // 1. Get the field input data.
         input = UIctrl.getInput();
+
+        if(input.description !== "" && !isNaN(input.value) && input.value > 0)
 
         // 2. Add the item to the inner work controller.
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
@@ -149,9 +176,11 @@ var controller = (function (budgetCtrl, UIctrl) {
         // 3. Add the item to the Display controller.
         UIctrl.addListItem(newItem, input.type)
 
-        // 4. Calculate the budget.
+        // 4. Clear the boxes
+        UIctrl.clearInput(); 
 
-        // 5. Show the budget to the display.
+        // 5. Calculate and update the budget
+        updateBudget();
 
     }
     /*The above event handler won't get executed because it's not an IIFE
@@ -168,3 +197,5 @@ var controller = (function (budgetCtrl, UIctrl) {
 
 //Calling the INITIALIZATION FUNCTION
 controller.init();
+
+
