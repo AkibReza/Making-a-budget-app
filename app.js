@@ -20,7 +20,7 @@ var budgetController = (function () {
     var allIncome = [];
 
     //Starting value = 0;
-    var totalExpenses = 0;
+    var totalBudget = 0;
 
     // Storing all the values into one place (? not sure)
     var data = {
