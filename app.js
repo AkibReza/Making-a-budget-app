@@ -1,14 +1,14 @@
 //Inner work
 var budgetController = (function () {
 
-    //Function constructor for each and every item of Expense
+    //Function object constructor for each and every item of Expense
     var Expense = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
     };
 
-    //Function constructor for each and every item of Income
+    //Function object constructor for each and every item of Income
     var Income = function (id, description, value) {
         this.id = id;
         this.description = description;
@@ -58,7 +58,8 @@ var budgetController = (function () {
             return newItem;
         }
     };
-
+    
+    
 
 
 })();
