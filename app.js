@@ -1,28 +1,27 @@
 //Inner work
 var budgetController = (function () {
 
-    //Function object constructor for each and every item of Expense
+    //Function object constructor for each item of Expense
     var Expense = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
     };
 
-    //Function object constructor for each and every item of Income
+    //Function object constructor for each item of Income
     var Income = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
     };
 
-    //Storing all the items into one place
-    var allExpenses = [];
+   
+  /*   var allExpenses = [];
     var allIncome = [];
+    var totalBudget = 0; 
+    My first ever bug. Succesfully hunted down :) */
 
-    //Starting value = 0;
-    var totalBudget = 0;
-
-    // Storing all the values into one place (? not sure)
+    // Storing all the values into one place ()
     var data = {
         allItems: {
             exp: [],
@@ -58,10 +57,6 @@ var budgetController = (function () {
             return newItem;
         }
     };
-    
-    
-
-
 })();
 
 //Display work
@@ -72,7 +67,7 @@ var UIcontroller = (function () {
         inputDescription: '.add__description',
         inputValue: '.add__value',
         inputBtn: '.add__btn',
-        expenseItem:'.expenses__list',
+        expenseItem: '.expenses__list',
         incomeItem: '.income__list'
     }
     return {
@@ -92,7 +87,7 @@ var UIcontroller = (function () {
             if (type === 'inc') {
                 element = StringLibrary.incomeItem;
                 html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
-            } else if(type === 'exp') {
+            } else if (type === 'exp') {
                 element = StringLibrary.expenseItem;
                 html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div> <div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
             }
@@ -106,13 +101,15 @@ var UIcontroller = (function () {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
         },
-        clearInput: function(){
+
+        //Clears the text boxes after an item is entered
+        clearInput: function () {
             var field, newField;
 
             field = document.querySelectorAll(StringLibrary.inputDescription + ', ' + StringLibrary.inputValue);
             newField = Array.prototype.slice.call(field);
 
-            newField.forEach(function(curr, i, arr){
+            newField.forEach(function (curr, i, arr) {
                 curr.value = ""
             });
 
@@ -152,7 +149,7 @@ var controller = (function (budgetCtrl, UIctrl) {
         });
     };
 
-    var updateBudget = function(){
+    var updateBudget = function () {
         //1. Calculate the budget
 
         //2. Return the budget
@@ -169,7 +166,7 @@ var controller = (function (budgetCtrl, UIctrl) {
         // 1. Get the field input data.
         input = UIctrl.getInput();
 
-        if(input.description !== "" && !isNaN(input.value) && input.value > 0)
+        if (input.description !== "" && !isNaN(input.value) && input.value > 0)
 
         // 2. Add the item to the inner work controller.
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
@@ -178,7 +175,7 @@ var controller = (function (budgetCtrl, UIctrl) {
         UIctrl.addListItem(newItem, input.type)
 
         // 4. Clear the boxes
-        UIctrl.clearInput(); 
+        UIctrl.clearInput();
 
         // 5. Calculate and update the budget
         updateBudget();
@@ -198,5 +195,3 @@ var controller = (function (budgetCtrl, UIctrl) {
 
 //Calling the INITIALIZATION FUNCTION
 controller.init();
-
-
