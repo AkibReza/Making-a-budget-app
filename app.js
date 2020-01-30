@@ -16,12 +16,10 @@ var budgetController = (function () {
     };
 
    
-  /*   var allExpenses = [];
-    var allIncome = [];
-    var totalBudget = 0; 
+  /*   var allExpenses = []; var allIncome = [];  var totalBudget = 0; 
     My first ever bug. Succesfully hunted down :) */
 
-    // Storing all the values into one place ()
+    // Storing all the items and values into one place ()
     var data = {
         allItems: {
             exp: [],
