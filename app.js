@@ -1,13 +1,13 @@
-
+// Inner budget works 
 var budgetController = (function () {
-
+    //An object constructor for Expense
     var Expense = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
         this.percentage = -1;
     };
-
+    //Adding the percentage calculation to the Object prototype
     Expense.prototype.calcPercentage = function (totalIncome) {
         if (totalIncome > 0) {
             this.percentage = Math.round((this.value / totalIncome) * 100);
@@ -15,17 +15,19 @@ var budgetController = (function () {
             this.percentage = -1;
         }
     };
-
+    //Used so this can be used in other public functions
     Expense.prototype.getPercentage = function () {
         return this.percentage;
     }
 
+    //An object constructor for Income
     var Income = function (id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
     };
 
+    //Total amount for either Income/Expense
     var calculateTotal = function (type) {
         var sum = 0;
         data.allItems[type].forEach(function (cur) {
@@ -34,6 +36,7 @@ var budgetController = (function () {
         data.totals[type] = sum;
     };
 
+    //Container for each items' value, description and their total summation.
     var data = {
         allItems: {
             exp: [],
@@ -46,20 +49,21 @@ var budgetController = (function () {
         budget: 0,
         percentage: -1,
     }
-
+    //Adding a new item
     return {
         addITEM: function (type, des, val) {
             var newItem, ID, lastID;
 
+            //Course 10 (summarized). lastID will be data.inc[] or data.exp[]
             lastID = data.allItems[type]
-            //Course 10
+            
+            //ID giver
             if (lastID.length > 0) {
                 ID = lastID[lastID.length - 1].id + 1;
             } else {
                 ID = 0;
             }
-
-
+            //Add the new item to Income or Expense depending on the type
             if (type === 'inc') {
                 newItem = new Income(ID, des, val)
             } else if (type === 'exp') {
@@ -70,6 +74,8 @@ var budgetController = (function () {
             return newItem;
         },
 
+        //Most difficult to understand >_<
+        // Making a new hard coded array with the changed ID array (?)
         deleteBudget: function (type, id) {
             var ids, index;
             ids = data.allItems[type].map(function (current) {
@@ -83,7 +89,7 @@ var budgetController = (function () {
             }
         },
 
-
+        //Calculates budget and shows percentage on the Expenses box.
         calculateBudget: function () {
             calculateTotal('exp');
             calculateTotal('inc');
@@ -96,11 +102,13 @@ var budgetController = (function () {
             }
         },
 
+
         calculatePercentages: function () {
             data.allItems.exp.forEach(function (curr) {
                 curr.calcPercentage(data.totals.inc);
             })
         },
+
         getPercentages: function () {
             var allPercentages = data.allItems.exp.map(function (cur) {
                 return cur.getPercentage();
@@ -108,6 +116,7 @@ var budgetController = (function () {
             return allPercentages;
         },
 
+        //
         getBudget: function () {
             return {
                 budget: data.budget,
@@ -125,11 +134,11 @@ var budgetController = (function () {
 
 
 var UIcontroller = (function () {
-
+    
     var StringLibrary = {
         inputType: '.add__type',
-        descType: '.add__description',
-        valueType: '.add__value',
+        inputDesc: '.add__description',
+        inputValue: '.add__value',
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
         expenseContainer: '.expense__list',
@@ -141,6 +150,8 @@ var UIcontroller = (function () {
         expensesPercTitle: '.item__percentage',
         dateTitle: '.budget__title--month'
     }
+    /* Formats the number so that after first 3 numbers there is a comma 
+       Shows plus or minus operator and shows the rounded number with two decimals */
     var formatNum = function (num, type) {
         var numSplit, int, dec;
         num = Math.abs(num);
@@ -158,6 +169,7 @@ var UIcontroller = (function () {
         return sign + ' ' + int + '.' + dec;
     };
 
+    
     var nodeListForEach = function (list, callback) {
         for (var i = 0; i < list.length; i++) {
             callback(list[i], i);
@@ -165,11 +177,12 @@ var UIcontroller = (function () {
     };
 
 return {
+    
     getInput: function () {
         return {
             type: document.querySelector(StringLibrary.inputType).value,
-            description: document.querySelector(StringLibrary.descType).value,
-            value: parseFloat(document.querySelector(StringLibrary.valueType).value)
+            description: document.querySelector(StringLibrary.inputDesc).value,
+            value: parseFloat(document.querySelector(StringLibrary.inputValue).value)
         }
 
     },
@@ -202,7 +215,7 @@ return {
     },
 
     clearFields: function () {
-        var fields = document.querySelectorAll(StringLibrary.descType + ', ' + StringLibrary.valueType)
+        var fields = document.querySelectorAll(StringLibrary.inputDesc + ', ' + StringLibrary.inputValue)
         var newFields = Array.prototype.slice.call(fields);
 
         newFields.forEach(function (current) {
@@ -258,8 +271,8 @@ return {
     changedType: function () {
         var fields = document.querySelectorAll(
             StringLibrary.inputType + ',' +
-            StringLibrary.descType + ',' +
-            StringLibrary.valueType
+            StringLibrary.inputDesc + ',' +
+            StringLibrary.inputValue
         );
         nodeListForEach(fields, function (cur) {
             cur.classList.toggle('red-focus');
@@ -350,7 +363,7 @@ var controller = (function (budget_CT, UI_CT) {
             updatePercentages();
         }
     }
-
+    
     return {
         init: function () {
             UI_CT.displayBudget({
